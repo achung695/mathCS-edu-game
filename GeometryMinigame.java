@@ -11,8 +11,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -30,7 +28,7 @@ import javafx.util.Duration;
  * removing all content from the game pane, then logically resetting all important
  * values of the game (like 'remaining lives' value).
  */
-public class GeometryMinigame {
+public class GeometryMinigame extends Game {
     private Shape _shape;
     private Label _scoreLabel;
     private Pane _geoPane;
@@ -62,7 +60,7 @@ public class GeometryMinigame {
         this.setUpRects(); // setting up shapes that are containers (user's goal)
         this.setUpLabel(); // setting up label
         pane.getChildren().addAll(_bground, _scoreLabel, _true,
-        _false, _trueButton, _falseButton); // add to pane
+                _false, _trueButton, _falseButton); // add to pane
         pane.getChildren().add(_shape.getShape());
         this.setUpTimeline();
         pane.getChildren().addAll(_shape.get_randomQuestion()); // add all the question labels.
@@ -85,6 +83,13 @@ public class GeometryMinigame {
         _trueButton.setOnAction(new ClickHandlerTrue());
         _falseButton.setOnAction(new ClickHandlerFalse());
         _restartButton.setOnAction(new ClickHandlerRestart());
+        this.createQuitButton(_geoPane);
+        Button helpButton = this.createHelpButton("To take the derivative of a term of x, " +
+                "using the power rule, simply bring down x-term’s exponent and multiply it by the coefficient. " +
+                "Then, subtract ‘1’ from the original exponential. For example, the derivative of 2x^4" +
+                " is 8x^3, the derivative of 3x^3 is 9x^2, and so on!");
+        _geoPane.getChildren().add(helpButton);
+
     }
 
     /*
@@ -96,7 +101,7 @@ public class GeometryMinigame {
         _scoreLabel.setScaleX(2);
         _scoreLabel.setScaleY(2);
         _scoreLabel.setLayoutX(80);
-        _scoreLabel.setLayoutY(30);
+        _scoreLabel.setLayoutY(40);
     }
 
     /*
@@ -123,7 +128,7 @@ public class GeometryMinigame {
      */
     private void checkGameOver() {
         if (_lives <= 0) { // covering all cases (including negative lives), in case the variable skips number 0 for some reason.
-           _isGameOver = true; // game is over
+            _isGameOver = true; // game is over
         } else if (_lives > 0) { // if there are lives left.
             _isGameOver = false; // the game is still going on
         }
@@ -185,13 +190,13 @@ public class GeometryMinigame {
     private class ClickHandlerRestart implements EventHandler<ActionEvent> {
         @Override
         public void handle(ActionEvent e) {
-        // go from game over screen-> to "reset all the values", and "add everything to the pane again".
+            // go from game over screen-> to "reset all the values", and "add everything to the pane again".
 
-              _geoPane.getChildren().clear(); // remove game over label and button
-             _geoPane.getChildren().addAll(_bground, _scoreLabel, _true,
+            _geoPane.getChildren().clear(); // remove game over label and button
+            _geoPane.getChildren().addAll(_bground, _scoreLabel, _true,
                     _false, _trueButton, _falseButton);
-             _geoPane.getChildren().addAll(_shape.getShape(), _shape.get_randomQuestion());
-             _lives = 3; // reset remaining lives
+            _geoPane.getChildren().addAll(_shape.getShape(), _shape.get_randomQuestion());
+            _lives = 3; // reset remaining lives
         }
     }
 
@@ -232,17 +237,17 @@ public class GeometryMinigame {
             }
             // if one question has been answered. load another question.
 
-           if (_isGameOver == true) { // if game is over, load the 'game over screen'.
-               _geoPane.getChildren().clear();
-               _gameOverLabel = new Label("GAME OVER!");
-               _gameOverLabel.setStyle("-fx-background-color: #F51B00");
-               _gameOverLabel.setAlignment(Pos.CENTER);
-               _gameOverLabel.setScaleX(3);
-               _gameOverLabel.setScaleY(3);
-               _gameOverLabel.setLayoutX(440);
-               _gameOverLabel.setLayoutY(400);
-               _geoPane.getChildren().addAll(_gameOverLabel, _restartButton);
-           }
+            if (_isGameOver == true) { // if game is over, load the 'game over screen'.
+                _geoPane.getChildren().clear();
+                _gameOverLabel = new Label("GAME OVER!");
+                _gameOverLabel.setStyle("-fx-background-color: #F51B00");
+                _gameOverLabel.setAlignment(Pos.CENTER);
+                _gameOverLabel.setScaleX(3);
+                _gameOverLabel.setScaleY(3);
+                _gameOverLabel.setLayoutX(440);
+                _gameOverLabel.setLayoutY(400);
+                _geoPane.getChildren().addAll(_gameOverLabel, _restartButton);
+            }
         }
     }
 
@@ -267,17 +272,17 @@ public class GeometryMinigame {
     }
 
 
-/*
- * Start of my private inner 'Shape' class.
- * This is a wrapper class of Java's Rectangle shape,
- * which has a Label overlapped on top of it.
- * I used a wrapper class because I wanted my 'Shape' to have
- * some additional properties on top of the original functionalities and
- * methods of 'Rectangle', such as an ability to randomly re-load
- * any of the 9 questions, or keep track of which question has been
- * selected (this is helpful for getting a question number for grading in ClickHandler class,
- * and I save this 'question number' with an instance variable of int).
- */
+    /*
+     * Start of my private inner 'Shape' class.
+     * This is a wrapper class of Java's Rectangle shape,
+     * which has a Label overlapped on top of it.
+     * I used a wrapper class because I wanted my 'Shape' to have
+     * some additional properties on top of the original functionalities and
+     * methods of 'Rectangle', such as an ability to randomly re-load
+     * any of the 9 questions, or keep track of which question has been
+     * selected (this is helpful for getting a question number for grading in ClickHandler class,
+     * and I save this 'question number' with an instance variable of int).
+     */
     private class Shape {
         private Rectangle _rect;
         private Label _question1; // instantiation of private labels (question labels)
