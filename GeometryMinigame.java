@@ -41,6 +41,9 @@ public class GeometryMinigame extends Game {
     private Rectangle _false; // that user can move objects to. (true or false q)
 
     private Timeline _geoTimeline;
+    private Button _speed1X;
+    private Button _speed2X;
+    private Button _speed5X;
 
     private Button _trueButton; // true option
     private Button _falseButton; // false option
@@ -54,13 +57,16 @@ public class GeometryMinigame extends Game {
         _trueButton = new Button("TRUE"); // instantiating user-pressed buttons
         _falseButton = new Button ("FALSE");
         _restartButton = new Button("RESTART"); // instantiating restart button (not added to gamepane graphically yet)
+        _speed1X = new Button("SHOPPING PERIOD MODE (DEFAULT)"); // easy mode
+        _speed2X = new Button("MIDTERM MODE"); // medium mode
+        _speed5X = new Button("FINALS MODE"); // hard mode
 
         _lives = 3; // initial lives = 3
         _isGameOver = false; // initial game over state: false
         this.setUpRects(); // setting up shapes that are containers (user's goal)
         this.setUpLabel(); // setting up label
         pane.getChildren().addAll(_bground, _scoreLabel, _true,
-                _false, _trueButton, _falseButton); // add to pane
+                _false, _trueButton, _falseButton, _speed1X, _speed2X, _speed5X); // add to pane
         pane.getChildren().add(_shape.getShape());
         this.setUpTimeline();
         pane.getChildren().addAll(_shape.get_randomQuestion()); // add all the question labels.
@@ -74,15 +80,32 @@ public class GeometryMinigame extends Game {
         _trueButton.setFocusTraversable(true);
         _falseButton.setFocusTraversable(true);
         _restartButton.setFocusTraversable(true);
+        _speed1X.setFocusTraversable(true);
+        _speed2X.setFocusTraversable(true);
+        _speed5X.setFocusTraversable(true);
+
         _trueButton.setLayoutX(_true.getX() + 50);
         _trueButton.setLayoutY(_true.getY() + 50);
         _restartButton.setLayoutX(440);
         _restartButton.setLayoutY(490);
         _falseButton.setLayoutX(_false.getX() + 50);
         _falseButton.setLayoutY(_false.getY() + 50);
-        _trueButton.setOnAction(new ClickHandlerTrue());
+
+        _speed1X.setLayoutX(80); // setting the x-location of difficulty buttons
+        _speed2X.setLayoutX(80);
+        _speed5X.setLayoutX(80);
+
+        _speed1X.setLayoutY(40); // setting the y-location of difficulty buttons
+        _speed2X.setLayoutY(40);
+        _speed5X.setLayoutY(40);
+
+        _trueButton.setOnAction(new ClickHandlerTrue()); // activate clickhandler for all buttons
         _falseButton.setOnAction(new ClickHandlerFalse());
         _restartButton.setOnAction(new ClickHandlerRestart());
+        _speed1X.setOnAction(new ClickHandler1X()));
+        _speed2X.setOnAction(new ClickHandler2X()));
+        _speed5X.setOnAction(new ClickHandler5X()));
+
         this.createQuitButton(_geoPane);
         Button helpButton = this.createHelpButton("To take the derivative of a term of x, " +
                 "using the power rule, simply bring down x-term’s exponent and multiply it by the coefficient. " +
@@ -191,10 +214,10 @@ public class GeometryMinigame extends Game {
         @Override
         public void handle(ActionEvent e) {
             // go from game over screen-> to "reset all the values", and "add everything to the pane again".
-
+            _geoTimeline.setRate(1); // revert to easy mode setting (the questions' falling speed)
             _geoPane.getChildren().clear(); // remove game over label and button
             _geoPane.getChildren().addAll(_bground, _scoreLabel, _true,
-                    _false, _trueButton, _falseButton);
+                    _false, _trueButton, _falseButton, _speed1X, _speed2X, _speed5X);
             _geoPane.getChildren().addAll(_shape.getShape(), _shape.get_randomQuestion());
             _lives = 3; // reset remaining lives
         }
@@ -238,7 +261,7 @@ public class GeometryMinigame extends Game {
             // if one question has been answered. load another question.
 
             if (_isGameOver == true) { // if game is over, load the 'game over screen'.
-                _geoPane.getChildren().clear();
+                _geoPane.getChildren().clear(); // clear everything from the game pane
                 _gameOverLabel = new Label("GAME OVER!");
                 _gameOverLabel.setStyle("-fx-background-color: #F51B00");
                 _gameOverLabel.setAlignment(Pos.CENTER);
@@ -271,6 +294,38 @@ public class GeometryMinigame extends Game {
         _bground.setFocusTraversable(false); // diverting focus from this ImageView node
     }
 
+    /*
+     * Private inner ClickHandler1X class that sets the timeline's speed as 1. (easy mode)
+     */
+    private class ClickHandler1X implements EventHandler<ActionEvent> {
+        @Override
+        public void handle(ActionEvent e) {
+            _geoTimeline.setRate(1); // set the timeline's rate as 1.
+        }
+
+    }
+
+    /*
+     * Private inner ClickHandler2X class that sets the timeline's speed as 2. (medium mode)
+     */
+    private class ClickHandler2X implements EventHandler<ActionEvent> {
+        @Override
+        public void handle(ActionEvent e) {
+            _geoTimeline.setRate(2); // set the timeline's rate as 2.
+        }
+
+    }
+
+    /*
+     * Private inner ClickHandler5X class that sets the timeline's speed as 5. (hard mode)
+     */
+    private class ClickHandler5X implements EventHandler<ActionEvent> {
+        @Override
+        public void handle(ActionEvent e) {
+            _geoTimeline.setRate(5); // set the timeline's rate as 5.
+        }
+
+    }
 
     /*
      * Start of my private inner 'Shape' class.
