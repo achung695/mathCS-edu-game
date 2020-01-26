@@ -18,6 +18,9 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
+/*
+  Creates Vigenere cipher game. Most code is repeated from the Caesar cipher.
+ */
 public class VigenereGame extends Game {
     private Pane _root;
     private Text _cipherText;
@@ -38,16 +41,7 @@ public class VigenereGame extends Game {
         _root = root;
         this.createBackground();
         this.setupWordArray();
-
-        _correct = new Text("That's correct!");
-        _correct.setStroke(Color.WHITE);
-        _correct.setFill(Color.WHITE);
-        _correct.setLayoutX(200);
-        _correct.setLayoutY(750);
-        _correct.setFont(new Font("Lucida Sans Typewriter Bold", 20));
-        _root.getChildren().add(_correct);
-        _correct.setVisible(false);
-
+        _correct = this.createCorrectLabel(root);
         this.createTranslateText();
         this.createAlphabet();
 
@@ -70,6 +64,7 @@ public class VigenereGame extends Game {
         this.createHelpButton();
     }
 
+    //Creates array of words to choose from for plaintext, for key, and creates hint layout
     private void setupWordArray() {
         List<String> wordList = Arrays.asList("HELLO", "GOODBYE", "SECRET", "MESSAGE", "DECODE", "VIGENERE",
                 "CIPHER", "ENCODE", "COMPUTER", "SCIENCE", "LEARN", "ALPHABET",
@@ -90,6 +85,7 @@ public class VigenereGame extends Game {
         _root.getChildren().add(_hint);
     }
 
+    //Creates background
     private void createBackground() {
         ImageView view = new ImageView(new Image(this.getClass().getResourceAsStream("VigenereBackground.jpg")));
         view.setFitHeight(800);
@@ -105,6 +101,7 @@ public class VigenereGame extends Game {
         _root.getChildren().addAll(view, rectangle, title);
     }
 
+    //Sets layout for cipher text
     private void createTranslateText() {
         Rectangle rectangle = new Rectangle(200, 150, 400, 100);
         rectangle.setFill(Color.WHITE);
@@ -115,6 +112,7 @@ public class VigenereGame extends Game {
         _root.getChildren().addAll(rectangle, _cipherText);
     }
 
+    //Creates alphabet that does not move
     private void createAlphabet() {
         Text text = new Text("A  B  C  D  E  F  G  H  I  J  K  L  M  N  O  P  Q  R  S  T  U  V  W  X  Y  Z");
         text.setStroke(Color.WHITE);
@@ -125,6 +123,7 @@ public class VigenereGame extends Game {
         _root.getChildren().add(text);
     }
 
+    //Creates alphabet that moves when user clicks arrows
     private void createSliderAlphabet(ArrayList<String> array, Text text, int x) {
         array.add("A  ");
         array.add("B  ");
@@ -165,6 +164,7 @@ public class VigenereGame extends Game {
         _root.getChildren().add(text);
     }
 
+    //Creates arrows to move alphabet
     private void createArrows(int x) {
         Polygon leftTriangle = new Polygon(0, 0, 20, -10, 20, 10);
         leftTriangle.setLayoutX(680);
@@ -192,6 +192,7 @@ public class VigenereGame extends Game {
         _root.getChildren().addAll(leftTriangle, rightTriangle);
     }
 
+    //Move the alphabet when arrows are clicked
     private class LeftShiftHandler implements EventHandler<MouseEvent> {
         @Override
         public void handle(MouseEvent e) {
@@ -272,6 +273,7 @@ public class VigenereGame extends Game {
         }
     }
 
+    //Creates textfield for translation to be entered
     private void createEnterText() {
         _translated = new TextField();
         _translated.setPrefHeight(100);
@@ -282,6 +284,7 @@ public class VigenereGame extends Game {
         _root.getChildren().add(_translated);
     }
 
+    //Creates buttons
     private void createButtons() {
         Button submitButton = new Button("Submit");
         submitButton.setLayoutX(350);
@@ -295,6 +298,7 @@ public class VigenereGame extends Game {
         _root.getChildren().addAll(submitButton, continueButton);
     }
 
+    //Creates help button
     private void createHelpButton() {
         Button helpButton = this.createHelpButton("The Vigenère cipher is another type of substitution cipher. " +
                 "Specifically, it's a repeated Caesar cipher! If two people were communicating with a Vigenère cipher, " +
@@ -307,6 +311,7 @@ public class VigenereGame extends Game {
         _root.getChildren().add(helpButton);
     }
 
+    //Generates new cipher text with new plain text/key
     private void resetCypher() {
         int keyInt = (int) (Math.random()*15);
         String key = _keyArray.get(keyInt);
@@ -328,6 +333,7 @@ public class VigenereGame extends Game {
         System.out.println(_plainText + " into " + _cipherText.getText());
     }
 
+    //Checks if answer is right
     private class SubmitHandler implements EventHandler<ActionEvent> {
         @Override
         public void handle(ActionEvent e) {
@@ -336,6 +342,7 @@ public class VigenereGame extends Game {
             }
         }
     }
+    //New question
     private class ContinueHandler implements EventHandler<ActionEvent> {
         @Override
         public void handle(ActionEvent e) {

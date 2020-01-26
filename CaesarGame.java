@@ -18,6 +18,9 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
+/*
+  Creates the Caesar cipher game
+ */
 public class CaesarGame extends Game {
     private Pane _root;
     private Text _cipherText;
@@ -33,16 +36,7 @@ public class CaesarGame extends Game {
         _root = root;
         this.createBackground();
         this.setupWordArray();
-
-        _correct = new Text("That's correct!");
-        _correct.setStroke(Color.WHITE);
-        _correct.setFill(Color.WHITE);
-        _correct.setLayoutX(200);
-        _correct.setLayoutY(750);
-        _correct.setFont(new Font("Lucida Sans Typewriter Bold", 20));
-        _root.getChildren().add(_correct);
-        _correct.setVisible(false);
-
+        _correct = this.createCorrectLabel(root);
         this.createTranslateText();
         this.createAlphabet();
         this.createSliderAlphabet();
@@ -53,6 +47,7 @@ public class CaesarGame extends Game {
         this.createHelpButton();
     }
 
+    //Creates word array plain text is drawn from, layout for hint
     private void setupWordArray() {
         List<String> wordList = Arrays.asList("HELLO", "GOODBYE", "SECRET", "MESSAGE", "DECODE", "CAESAR",
                 "CIPHER", "ENCODE", "COMPUTER", "SCIENCE", "LEARN", "ALPHABET",
@@ -68,6 +63,7 @@ public class CaesarGame extends Game {
         _root.getChildren().add(_hint);
     }
 
+    //Creates image background, title
     private void createBackground() {
         ImageView view = new ImageView(new Image(this.getClass().getResourceAsStream("CipherBackground.jpg")));
         view.setFitHeight(800);
@@ -83,6 +79,7 @@ public class CaesarGame extends Game {
         _root.getChildren().addAll(view, rectangle, title);
     }
 
+    //Creates layout for text to be translated
     private void createTranslateText() {
         Rectangle rectangle = new Rectangle(200, 150, 400, 100);
         rectangle.setFill(Color.WHITE);
@@ -93,6 +90,7 @@ public class CaesarGame extends Game {
         _root.getChildren().addAll(rectangle, _cipherText);
     }
 
+    //Creates alphabet that doesn't move
     private void createAlphabet() {
         Text text = new Text("A  B  C  D  E  F  G  H  I  J  K  L  M  N  O  P  Q  R  S  T  U  V  W  X  Y  Z");
         text.setStroke(Color.WHITE);
@@ -103,6 +101,7 @@ public class CaesarGame extends Game {
         _root.getChildren().add(text);
     }
 
+    //Creates alphabet that moves when user clicks arrows
     private void createSliderAlphabet() {
         _array = new ArrayList<String>();
         _array.add("A  ");
@@ -144,6 +143,7 @@ public class CaesarGame extends Game {
         _root.getChildren().add(_keyText);
     }
 
+    //Creates arrows to move slider alphabet
     private void createArrows() {
         Polygon leftTriangle = new Polygon(0, 0, 30, -20, 30, 20);
         leftTriangle.setLayoutX(300);
@@ -158,6 +158,7 @@ public class CaesarGame extends Game {
         _root.getChildren().addAll(leftTriangle, rightTriangle);
     }
 
+    //Controls slider alphabet movement
     private class LeftShiftHandler implements EventHandler<MouseEvent> {
         @Override
         public void handle(MouseEvent e) {
@@ -171,7 +172,6 @@ public class CaesarGame extends Game {
             _keyText.setText(s);
         }
     }
-
     private class RightShiftHandler implements EventHandler<MouseEvent> {
         @Override
         public void handle(MouseEvent e) {
@@ -186,6 +186,7 @@ public class CaesarGame extends Game {
         }
     }
 
+    //Creates text field to enter translated text
     private void createEnterText() {
         _translated = new TextField();
         _translated.setPrefHeight(100);
@@ -196,6 +197,7 @@ public class CaesarGame extends Game {
         _root.getChildren().add(_translated);
     }
 
+    //Creates buttons
     private void createButtons() {
         Button submitButton = new Button("Submit");
         submitButton.setLayoutX(350);
@@ -209,6 +211,7 @@ public class CaesarGame extends Game {
         _root.getChildren().addAll(submitButton, continueButton);
     }
 
+    //Creates help button
     private void createHelpButton() {
         Button helpButton = this.createHelpButton("A Caesar cipher is a type of simple substition cipher, in" +
                 " which each plain text letter is replaced by another cipher letter. In the Caesar cipher, a letter" +
@@ -218,6 +221,7 @@ public class CaesarGame extends Game {
         _root.getChildren().add(helpButton);
     }
 
+    //Generates new plain text with new number of shifts
     private void resetCypher() {
         int shift = (int) (Math.random()*25+1);
         int word = (int) (Math.random()*_wordArray.size());
@@ -236,6 +240,7 @@ public class CaesarGame extends Game {
         _correct.setVisible(false);
     }
 
+    //Checks if answer is correct
     private class SubmitHandler implements EventHandler<ActionEvent> {
         @Override
         public void handle(ActionEvent e) {
@@ -244,6 +249,8 @@ public class CaesarGame extends Game {
             }
         }
     }
+
+    //Generates new question
     private class ContinueHandler implements EventHandler<ActionEvent> {
         @Override
         public void handle(ActionEvent e) {

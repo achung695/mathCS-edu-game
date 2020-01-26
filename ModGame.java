@@ -12,6 +12,9 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
+/*
+  Creates modulo game
+ */
 
 public class ModGame extends Game {
     private Pane _root;
@@ -24,16 +27,7 @@ public class ModGame extends Game {
     public ModGame(Pane root) {
         _root = root;
         this.createBackground();
-
-        _correct = new Text("That's correct!");
-        _correct.setStroke(Color.WHITE);
-        _correct.setFill(Color.WHITE);
-        _correct.setLayoutX(200);
-        _correct.setLayoutY(750);
-        _correct.setFont(new Font("Lucida Sans Typewriter Bold", 20));
-        _root.getChildren().add(_correct);
-        _correct.setVisible(false);
-
+        _correct = this.createCorrectLabel(root);
         this.createEnterText();
         this.createEquation();
         this.createButtons();
@@ -41,6 +35,7 @@ public class ModGame extends Game {
         this.createHelpButton();
     }
 
+    //Creates background
     private void createBackground() {
         ImageView view = new ImageView(new Image(this.getClass().getResourceAsStream("ModBackground.jpg")));
         view.setFitHeight(800);
@@ -56,6 +51,7 @@ public class ModGame extends Game {
         _root.getChildren().addAll(view, rectangle, title);
     }
 
+    //Creates layout for equation
     private void createEquation() {
         Rectangle rectangle = new Rectangle(200, 270, 400, 100);
         rectangle.setFill(Color.WHITE);
@@ -67,6 +63,7 @@ public class ModGame extends Game {
 
     }
 
+    //Generate new equation
     private void resetEquation() { _answer.setText("");
         _a = (int) (Math.random()*100);
         _b = (int) (Math.random()*10) + 1;
@@ -75,6 +72,7 @@ public class ModGame extends Game {
         _correct.setVisible(false);
     }
 
+    //Creates textfield to enter answer
     private void createEnterText() {
         _answer = new TextField();
         _answer.setPrefHeight(100);
@@ -85,6 +83,7 @@ public class ModGame extends Game {
         _root.getChildren().add(_answer);
     }
 
+    //Creates buttons
     private void createButtons() {
         Button submitButton = new Button("Submit");
         submitButton.setLayoutX(350);
@@ -97,6 +96,7 @@ public class ModGame extends Game {
         _root.getChildren().addAll(submitButton, continueButton);
     }
 
+    //Creates help button
     private void createHelpButton() {
         Button helpButton = this.createHelpButton("You've probably ended up with remainders doing long division before," +
                 " right? Well that's where modulos come in! A modulo operator solves for the remainder after division takes place." +
@@ -105,6 +105,7 @@ public class ModGame extends Game {
         _root.getChildren().add(helpButton);
     }
 
+    //Checks if answer is correct
     private class SubmitHandler implements EventHandler<ActionEvent> {
         @Override
         public void handle(ActionEvent e) {
@@ -114,6 +115,7 @@ public class ModGame extends Game {
         }
     }
 
+    //Generates next question
     private class ContinueHandler implements EventHandler<ActionEvent> {
         @Override
         public void handle(ActionEvent e) {

@@ -10,6 +10,11 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
+/*
+ Superclass for all games; contains methods for returning to main menu, going to next question,
+ creating help section, and creating correct label.
+ */
+
 public class Game {
     private Pane _root;
     private String _help;
@@ -18,6 +23,7 @@ public class Game {
     private Button _continueButton;
     private Rectangle _helpBackground;
 
+    //Creates button to return to main menu
     public void createQuitButton(Pane root) {
         _root = root;
         Button button = new Button("Return to menu");
@@ -26,7 +32,6 @@ public class Game {
         button.setLayoutX(10);
         _root.getChildren().add(button);
     }
-
     private class QuitHandler implements EventHandler<ActionEvent> {
         @Override
         public void handle(ActionEvent e) {
@@ -34,6 +39,8 @@ public class Game {
             Menu menu = new Menu(_root);
         }
     }
+
+    //Moves to next question ONLY once given event handler by subclass of Game
     public Button createResetButton() {
         Button button = new Button("Next question!");
         button.setLayoutY(10);
@@ -41,6 +48,7 @@ public class Game {
         return button;
     }
 
+    //Opens help window that contains string used as argument
     public Button createHelpButton(String string) {
         _help = string;
         Button button = new Button("?");
@@ -89,5 +97,18 @@ public class Game {
             _continueButton.setVisible(false);
             _helpBackground.setVisible(false);
         }
+    }
+
+    //Creates correct label
+    public Text createCorrectLabel(Pane root) {
+        Text correct = new Text("That's correct!");
+        correct.setStroke(Color.WHITE);
+        correct.setFill(Color.WHITE);
+        correct.setLayoutX(350);
+        correct.setLayoutY(750);
+        correct.setFont(new Font("Lucida Sans Typewriter Bold", 20));
+        root.getChildren().add(correct);
+        correct.setVisible(false);
+        return correct;
     }
 }

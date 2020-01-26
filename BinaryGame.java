@@ -1,22 +1,20 @@
 package EduGame;
 
-import java.util.ArrayList;
-
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
-import javax.swing.*;
+/*
+  Creates the decimal-to-binary conversion game
+ */
 
 public class BinaryGame extends Game {
     private Pane _root;
@@ -28,16 +26,7 @@ public class BinaryGame extends Game {
     public BinaryGame(Pane root) {
         _root = root;
         this.createBackground();
-
-        _correct = new Text("That's correct!");
-        _correct.setStroke(Color.WHITE);
-        _correct.setFill(Color.WHITE);
-        _correct.setLayoutX(200);
-        _correct.setLayoutY(750);
-        _correct.setFont(new Font("Lucida Sans Typewriter Bold", 20));
-        _root.getChildren().add(_correct);
-        _correct.setVisible(false);
-
+        _correct = this.createCorrectLabel(root);
         this.createTranslateText();
         this.createEnterText();
         this.createButtons();
@@ -45,6 +34,7 @@ public class BinaryGame extends Game {
         this.createHelpButton();
     }
 
+    //Creates background, title
     private void createBackground() {
         ImageView view = new ImageView(new Image(this.getClass().getResourceAsStream("BinaryBackground.jpg")));
         view.setFitHeight(800);
@@ -60,6 +50,7 @@ public class BinaryGame extends Game {
         _root.getChildren().addAll(view, rectangle, title);
     }
 
+    //Creates layout for text to be translated
     private void createTranslateText() {
         Rectangle rectangle = new Rectangle(200, 270, 400, 100);
         rectangle.setFill(Color.WHITE);
@@ -70,6 +61,7 @@ public class BinaryGame extends Game {
         _root.getChildren().addAll(rectangle, _decimalText);
     }
 
+    //Creates textfield to enter translation
     private void createEnterText() {
         _binary = new TextField();
         _binary.setPrefHeight(100);
@@ -80,6 +72,7 @@ public class BinaryGame extends Game {
         _root.getChildren().add(_binary);
     }
 
+    //Creates buttons
     private void createButtons() {
         Button submitButton = new Button("Submit");
         submitButton.setLayoutX(350);
@@ -92,6 +85,7 @@ public class BinaryGame extends Game {
         _root.getChildren().addAll(submitButton, continueButton);
     }
 
+    //Generates new problem
     private void resetDecimal() {
         _decimal = (int) (Math.random()*33);
         _decimalText.setText(Integer.toString(_decimal));
@@ -99,6 +93,7 @@ public class BinaryGame extends Game {
         _correct.setVisible(false);
     }
 
+    //Creates help button
     private void createHelpButton() {
         Button helpButton = this.createHelpButton("In a normal decimal system, there are 10 digits—0 through 9. In" +
                 " binary, there are only two—0 and 1! Each place value in binary represents a power of two. The first place" +
@@ -109,6 +104,7 @@ public class BinaryGame extends Game {
         _root.getChildren().add(helpButton);
     }
 
+    //Handles answers submission
     private class SubmitHandler implements EventHandler<ActionEvent> {
         @Override
         public void handle(ActionEvent e) {
@@ -117,6 +113,8 @@ public class BinaryGame extends Game {
             }
         }
     }
+
+    //Generates new question when user clicks continue
     private class ContinueHandler implements EventHandler<ActionEvent> {
         @Override
         public void handle(ActionEvent e) {
