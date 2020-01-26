@@ -61,6 +61,7 @@ public class GeometryMinigame extends Game {
         _speed2X = new Button("MIDTERM MODE"); // medium mode
         _speed5X = new Button("FINALS MODE"); // hard mode
 
+
         _lives = 3; // initial lives = 3
         _isGameOver = false; // initial game over state: false
         this.setUpRects(); // setting up shapes that are containers (user's goal)
@@ -71,6 +72,9 @@ public class GeometryMinigame extends Game {
         this.setUpTimeline();
         pane.getChildren().addAll(_shape.get_randomQuestion()); // add all the question labels.
         this.setUpButtons();
+        _speed1X.setLayoutY(100);
+        _speed2X.setLayoutY(150);
+        _speed5X.setLayoutY(200);
     }
 
     /*
@@ -99,12 +103,12 @@ public class GeometryMinigame extends Game {
         _speed2X.setLayoutY(40);
         _speed5X.setLayoutY(40);
 
-        _trueButton.setOnAction(new ClickHandlerTrue()); // activate clickhandler for all buttons
+        _trueButton.setOnAction(new ClickHandlerTrue());
         _falseButton.setOnAction(new ClickHandlerFalse());
         _restartButton.setOnAction(new ClickHandlerRestart());
-        _speed1X.setOnAction(new ClickHandler1X()));
-        _speed2X.setOnAction(new ClickHandler2X()));
-        _speed5X.setOnAction(new ClickHandler5X()));
+        _speed1X.setOnAction(new ClickHandler1X());
+        _speed2X.setOnAction(new ClickHandler2X());
+        _speed5X.setOnAction(new ClickHandler5X());
 
         this.createQuitButton(_geoPane);
         Button helpButton = this.createHelpButton("To take the derivative of a term of x, " +
@@ -123,8 +127,8 @@ public class GeometryMinigame extends Game {
         _scoreLabel.setStyle("-fx-background-color: #FFFF33");
         _scoreLabel.setScaleX(2);
         _scoreLabel.setScaleY(2);
-        _scoreLabel.setLayoutX(80);
-        _scoreLabel.setLayoutY(40);
+        _scoreLabel.setLayoutX(100);
+        _scoreLabel.setLayoutY(60);
     }
 
     /*
@@ -220,6 +224,12 @@ public class GeometryMinigame extends Game {
                     _false, _trueButton, _falseButton, _speed1X, _speed2X, _speed5X);
             _geoPane.getChildren().addAll(_shape.getShape(), _shape.get_randomQuestion());
             _lives = 3; // reset remaining lives
+            GeometryMinigame.this.createQuitButton(_geoPane);
+            Button helpButton = GeometryMinigame.this.createHelpButton("To take the derivative of a term of x, " +
+                    "using the power rule, simply bring down x-term’s exponent and multiply it by the coefficient. " +
+                    "Then, subtract ‘1’ from the original exponential. For example, the derivative of 2x^4" +
+                    " is 8x^3, the derivative of 3x^3 is 9x^2, and so on!");
+            _geoPane.getChildren().add(helpButton);
         }
     }
 
@@ -261,7 +271,7 @@ public class GeometryMinigame extends Game {
             // if one question has been answered. load another question.
 
             if (_isGameOver == true) { // if game is over, load the 'game over screen'.
-                _geoPane.getChildren().clear(); // clear everything from the game pane
+                _geoPane.getChildren().clear();
                 _gameOverLabel = new Label("GAME OVER!");
                 _gameOverLabel.setStyle("-fx-background-color: #F51B00");
                 _gameOverLabel.setAlignment(Pos.CENTER);
@@ -461,7 +471,7 @@ public class GeometryMinigame extends Game {
          * selected. It uses a switch statement to achieve this.
          */
         public void produceQuestion() { // sets _shape as a random thing, and returns a random q!
-            int rand_int = (int) (Math.random()*10);
+            int rand_int = (int) (Math.random()*12);
             switch (rand_int) { // switch statement to produce random question
                 case 0:
                     _randomQuestion = _question1;
@@ -500,8 +510,37 @@ public class GeometryMinigame extends Game {
                     _whichQIsIt = 9;
                     break;
                 case 9:
-                    _randomQuestion = _question5;
+                    int a = (int) (Math.random()*10);
+                    int b = (int) (Math.random()*10);
+                    int c = a*b;
+                    int d = b-1;
+                    _randomQuestion = new Label(a+"x^"+b+"="+c+"x^"+d+"?");
                     _whichQIsIt = 5;
+                    _randomQuestion.setStyle("-fx-background-color: #FFFFFF");
+                    _randomQuestion.setScaleX(1.5);
+                    _randomQuestion.setScaleY(1.5);
+                    break;
+                case 10:
+                    int a1 = (int) (Math.random()*10);
+                    int b1 = (int) (Math.random()*10);
+                    int c1 = a1;
+                    int d1 = b1-1;
+                    _randomQuestion = new Label(a1+"x^"+b1+"="+c1+"x^"+d1+"?");
+                    _whichQIsIt = 3;
+                    _randomQuestion.setStyle("-fx-background-color: #FFFFFF");
+                    _randomQuestion.setScaleX(1.5);
+                    _randomQuestion.setScaleY(1.5);
+                    break;
+                case 11:
+                    int a2 = (int) (Math.random()*10) +1;
+                    int b2 = (int) (Math.random()*10) +1;
+                    int c2 = a2 * b2;
+                    int d2 = b2;
+                    _randomQuestion = new Label(a2+"x^"+b2+"="+c2+"x^"+d2+"?");
+                    _whichQIsIt = 3;
+                    _randomQuestion.setStyle("-fx-background-color: #FFFFFF");
+                    _randomQuestion.setScaleX(1.5);
+                    _randomQuestion.setScaleY(1.5);
                     break;
                 default:
                     _randomQuestion = _question6;
